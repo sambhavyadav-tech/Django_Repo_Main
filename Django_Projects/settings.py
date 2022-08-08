@@ -18,9 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configure Django App for Heroku.
 import django_heroku
-django_heroku.settings(locals())
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -131,3 +128,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+django_heroku.settings(locals())
