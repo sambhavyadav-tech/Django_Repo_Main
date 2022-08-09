@@ -101,7 +101,7 @@ def reviewPie(df):
             df[df['review_category'] == 'neutral']['review_category'].count()]
     colors = ['green', 'red', 'yellow']
     # pull is given as a fraction of the pie radius
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values, pull=[0.1, 0.1, 0.3])])
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, pull=[0.1, 0.1, 0.2])])
     fig.update_traces(hoverinfo='label+percent', textinfo='label+percent', textfont_size=15,
                     marker=dict(colors=colors, line=dict(color='#000000', width=1)))
     fig.update_layout(
@@ -111,7 +111,7 @@ def reviewPie(df):
         margin=dict(
             l=50,
             r=50,
-            b=0,
+            b=10,
             t=30
         ),
         paper_bgcolor="white"
@@ -199,85 +199,43 @@ def timeSeriesGraph(lineDf):
     timeSeries_div=plot(fig,output_type='div',include_plotlyjs=False)
     return {'timeSeries_div':timeSeries_div}
 
-def positiveWc(df):
-    wordcloud = WordCloud(height=2000, width=2000, background_color='yellow')
-    wordcloud = wordcloud.generate(' '.join(df.loc[df['review_category']=='positive','cleaned_reviews'].tolist()[:10]))
-    plt.imshow(wordcloud)
-    plt.title("Most common words in positive comments")
-    plt.axis('off')
-    buf = io.BytesIO()
-    plt.savefig(buf,format='png')
-    buf.seek(0)
-    buffer = b''.join(buf)
-    b2 = base64.b64encode(buffer)
-    plot_positive_wc_img=b2.decode('utf-8')
-    return {'posWc':plot_positive_wc_img}
+# def positiveWc(df):
+#     wordcloud = WordCloud(height=2000, width=2000, background_color='yellow')
+#     wordcloud1 = wordcloud.generate(' '.join(df.loc[df['review_category']=='positive','cleaned_reviews'].tolist()[0:2]))
+#     plt.imshow(wordcloud1)
+#     plt.title("Most common words in positive comments")
+#     plt.axis('off')
+#     buf1 = io.BytesIO()
+#     plt.savefig(buf1,format='png')
+#     buf1.seek(0)
+#     buffer1 = b''.join(buf1)
+#     b1 = base64.b64encode(buffer1)
+#     plot_positive_wc_img=b1.decode('utf-8')
+#     return {'posWc':plot_positive_wc_img}
 
-def negativeWc(df):
-    wordcloud = WordCloud(height=2000, width=2000, background_color='red')
-    wordcloud = wordcloud.generate(' '.join(df.loc[df['review_category']=='negative','cleaned_reviews'].tolist()[:10]))
-    plt.imshow(wordcloud)
-    plt.title("Most common words in negative comments")
-    plt.axis('off')
-    buf = io.BytesIO()
-    plt.savefig(buf,format='png')
-    buf.seek(0)
-    buffer = b''.join(buf)
-    b2 = base64.b64encode(buffer)
-    plot_negative_wc_img=b2.decode('utf-8')
-    return {'negWc':plot_negative_wc_img}
+# def negativeWc(df):
+#     wordcloud = WordCloud(height=2000, width=2000, background_color='red')
+#     wordcloud2 = wordcloud.generate(' '.join(df.loc[df['review_category']=='negative','cleaned_reviews'].tolist()[0:2]))
+#     plt.imshow(wordcloud2)
+#     plt.title("Most common words in negative comments")
+#     plt.axis('off')
+#     buf2 = io.BytesIO()
+#     plt.savefig(buf2,format='png')
+#     buf2.seek(0)
+#     buffer2 = b''.join(buf2)
+#     b2 = base64.b64encode(buffer2)
+#     plot_negative_wc_img=b2.decode('utf-8')
+#     return {'negWc':plot_negative_wc_img}
 
 def getReviewCharts(pId):
     print("getReviewCharts", datetime.now())
-    # # response=Searchasin(pId)
-    # link=''
-    # response=None
-    # # Get Asin Data for the product id
-    # # while str(type(response))!="<class 'str'>":
-    # #     response=getAsinData(pId)
-    # response=Searchasin(pId)
-    # print(response,type(response))
-    # soup=BeautifulSoup(response.content,'html.parser')
-    # link=soup.findAll("a",attrs={'data-hook':"see-all-reviews-link-foot"})[0]['href']
-    # print(link)
-
-    # # Get Reviews
-    # reviews=[] # Store review data
-    # location=[] # Store location data
-    # date=[] # Store date data
-    # # Get the no of pages for review
-    # tasks=[]
-    # executor=ThreadPoolExecutor(max_workers=100)
-
-    # for k in range(10):# Number of pages
-    #     tasks.append(executor.submit(getReviewsList,link,k))
-
-    # for task in as_completed(tasks):
-    #     revDict=task.result()
-    #     reviews+=revDict['rev']
-    #     location+=revDict['loc']
-    #     date+=revDict['dat']
-
-    # print('reviews Collected-----------------')
-    # revData={'reviews':reviews,'country':location,'date':date} #converting the reviews list into a dictionary
-    # review_data=pd.DataFrame.from_dict(revData) #converting this dictionary into a dataframe
-    # # Store review into csv file
-    # review_data.to_csv(r'D:\Django-Webapp\Django_Product_Reviewer\Product_Reviewer\product_review_app\scrapped_reviews\/'+str(pId)+'_reviews.csv',index=False)
-
-    # df=review_data.copy() # Creating a copy of the original data
-    # df['reviews']=df['reviews'].apply(lambda x:x.strip('\n')) # To remove '\n' from every review
-    # df['cleaned_reviews']=df['reviews'].apply(lambda x:clean_text(x))
-
-    # df['sentiment_score']=df['reviews'].apply(lambda x:compound_score(x)) # applying on the reviews column to get the score
-
-    # df['review_category']=df['sentiment_score'].apply(lambda x:sentiment_category(x))
 
     # Read data from scrapped reviews csv file
-    df=pd.read_csv(r'C:\Users\sambhav\OneDrive\Desktop\Django_Projects\Django_Projects\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv')
+    df=pd.read_csv(r'.\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv')
     wcTasks=[]
     wcExecutor=ThreadPoolExecutor(max_workers=4)
-    wcTasks.append(wcExecutor.submit(positiveWc,df))
-    wcTasks.append(wcExecutor.submit(negativeWc,df))
+    #wcTasks.append(wcExecutor.submit(positiveWc,df))
+    #wcTasks.append(wcExecutor.submit(negativeWc,df))
    
     df.sort_values(by=['sentiment_score'],ascending=False).head() # To get top positive review
 
@@ -301,16 +259,16 @@ def getReviewCharts(pId):
     for task in as_completed(wcTasks):
         wcResult=task.result()
         print(wcResult.keys())
-        if 'posWc' in wcResult.keys():
-            plot_positive_wc_img=wcResult['posWc']
-        elif 'negWc' in wcResult.keys():
-            plot_negative_wc_img=wcResult['negWc']
-        elif 'pie_div' in wcResult.keys():
+        # if 'posWc' in wcResult.keys():
+        #     plot_positive_wc_img=wcResult['posWc']
+        # elif 'negWc' in wcResult.keys():
+        #     plot_negative_wc_img=wcResult['negWc']
+        if 'pie_div' in wcResult.keys():
             pie_div=wcResult['pie_div']
         elif 'timeSeries_div' in wcResult.keys():
             timeSeries_div=wcResult['timeSeries_div']
     print("getReviewCharts completed ",datetime.now())
-    return pie_div,timeSeries_div,positive_comment,negative_comment,plot_positive_wc_img,plot_negative_wc_img
+    return pie_div,timeSeries_div,positive_comment,negative_comment
 
 def saveReviews(pId):
     print(datetime.now())
@@ -334,7 +292,7 @@ def saveReviews(pId):
     tasks=[]
     executor=ThreadPoolExecutor(max_workers=100)
 
-    for k in range(5):# Number of pages
+    for k in range(2):# Number of pages
         tasks.append(executor.submit(getReviewsList,link,k))
 
     for task in as_completed(tasks):
@@ -358,5 +316,5 @@ def saveReviews(pId):
     df['review_category']=df['sentiment_score'].apply(lambda x:sentiment_category(x))
     # print(df.head())
     # Store review into csv file
-    df.to_csv(r'C:\Users\sambhav\OneDrive\Desktop\Django_Projects\Django_Projects\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv',index=False)
+    df.to_csv(r'.\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv',index=False)
     print('reviews saved for pid', pId)

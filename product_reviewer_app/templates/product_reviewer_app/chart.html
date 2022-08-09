@@ -125,7 +125,7 @@
             Time series graph with review count {% autoescape off %} {{ plot_div }} {% endautoescape %}
         </div>
 
-        <div class="card col-md-5 mx-auto mt-2" style="width: 45%;">
+        {% comment %} <div class="card col-md-5 mx-auto mt-2" style="width: 45%;">
             <!-- Show a matplotlib image -->
             Positive Words CLoud
             <img src="data:image/png;base64, {{ plot_positive_wc_img }}">
@@ -135,7 +135,7 @@
             <!-- Show a matplotlib image -->
             Negative Words CLoud
             <img src="data:image/png;base64, {{ plot_negative_wc_img }}">
-        </div>
+        </div> {% endcomment %}
 
         <div class="my-auto" style="width: 80%; align-content: center;">
             <p id="p1">{{positive_comment}}</p>

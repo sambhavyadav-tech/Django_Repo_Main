@@ -57,8 +57,8 @@ def reviewAnalysis(request):
         # get pId
         pId = request.GET['id']
         # plot_overall_wc_img,pie_div,timeSeries_div,plot_positive_wc_img,plot_positive_wc_img,positive_comment,negative_comment=ra.getReviewCharts(pId)
-        pie_div,timeSeries_div,positive_comment,negative_comment,plot_positive_wc_img,plot_negative_wc_img = ra.getReviewCharts(pId)
-        return render(request, 'product_reviewer_app/chart.html', context={'plot_div': timeSeries_div,'pie_div':pie_div,'positive_comment':positive_comment,'negative_comment':negative_comment,'plot_positive_wc_img':plot_positive_wc_img,'plot_negative_wc_img':plot_negative_wc_img })
+        pie_div,timeSeries_div,positive_comment,negative_comment = ra.getReviewCharts(pId)
+        return render(request, 'product_reviewer_app/chart.html', context={'plot_div': timeSeries_div,'pie_div':pie_div,'positive_comment':positive_comment,'negative_comment':negative_comment})
     except Exception as e:
         print(e)
         return 'Error'
