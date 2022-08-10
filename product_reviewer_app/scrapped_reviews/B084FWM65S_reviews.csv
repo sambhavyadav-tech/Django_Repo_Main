@@ -1,0 +1,9 @@
+reviews,country,date,cleaned_reviews,sentiment_score,review_category
+The product was damage and not good,India,11-July-2022,product damag good,-0.6814,negative
+Super product,India,17-April-2022,super product,0.5994,positive
+"Poor quality product , don’t buy it , not worth the price rather buy other look a like products. Thanks",India,18-November-2020,poor qualiti product dont buy worth price rather buy look like product thank,0.1615,positive
+Very cheap quality. Not at all recommended. Please do not waste your money in buying such products. Just ignore it.,India,18-November-2020,cheap qualiti recommend pleas wast money buy product ignor,0.1381,positive
+The product was damage and not good,India,11-July-2022,product damag good,-0.6814,negative
+Super product,India,17-April-2022,super product,0.5994,positive
+"Poor quality product , don’t buy it , not worth the price rather buy other look a like products. Thanks",India,18-November-2020,poor qualiti product dont buy worth price rather buy look like product thank,0.1615,positive
+Very cheap quality. Not at all recommended. Please do not waste your money in buying such products. Just ignore it.,India,18-November-2020,cheap qualiti recommend pleas wast money buy product ignor,0.1381,positive

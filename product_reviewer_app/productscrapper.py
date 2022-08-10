@@ -30,7 +30,7 @@ def getProductIdAndImage(searchVal, prodPageNo):
         #str(res)
         soup=BeautifulSoup(response.content,'html.parser')
         #print(soup)
-        filterKeyList=['s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16','s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col sg-col-12-of-16','sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col sg-col-4-of-20']
+        filterKeyList=['sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 AdHolder sg-col s-widget-spacing-small sg-col-4-of-20','s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16','s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col sg-col-12-of-16','sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col sg-col-4-of-20']
         filterKey=""
         for filter in filterKeyList:
             if len(soup.find_all("div",attrs={"class":filter}))>1:

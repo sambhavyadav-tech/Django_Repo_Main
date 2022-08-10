@@ -25,32 +25,38 @@ def index(request):
     return response
 
 def SearchPage(request):
-    # set cookie for traversing to different pages
-    prodPageNo=1
+    try: 
+            
+        # set cookie for traversing to different pages
+        prodPageNo=1
 
-    # get search box data
-    searchVal = request.GET['query']
-    print(searchVal)
-    if 'searchProdPageNo' in request.COOKIES and  'prodName' in request.COOKIES:
-        if request.COOKIES['prodName']!=searchVal:
-            prodPageNo = 1
-        else:
-            prodPageNo=int(request.COOKIES['searchProdPageNo'])
-   
-    # call the scrapper module function to get the list of products
-    #params = {'products': "https://m.media-amazon.com/images/I/71KxuRv3-fL._AC_UL320_.jpg", 'search':srh}
-    params = {'product': searchVal, 'searchResult':ps.getProductIdAndImage(searchVal,prodPageNo)}
-    #print(params)
+        # get search box data
+        searchVal = request.GET['query']
+        print(searchVal)
+        if 'searchProdPageNo' in request.COOKIES and  'prodName' in request.COOKIES:
+            if request.COOKIES['prodName']!=searchVal:
+                prodPageNo = 1
+            else:
+                prodPageNo=int(request.COOKIES['searchProdPageNo'])
+    
+        # call the scrapper module function to get the list of products
+        #params = {'products': "https://m.media-amazon.com/images/I/71KxuRv3-fL._AC_UL320_.jpg", 'search':srh}
+        params = {'product': searchVal, 'searchResult':ps.getProductIdAndImage(searchVal,prodPageNo)}
+        #print(params)
 
-    # set cookie for traversing to different pages
+        # set cookie for traversing to different pages
 
-    response =  render(request, 'product_reviewer_app/search.html', params)
-   
-    response.set_cookie('searchProdPageNo', int(prodPageNo)+1)
-    response.set_cookie('prodName', searchVal)
-    print(int(prodPageNo)+1)
-    # return render(request, 'product_review/search.html', params)
-    return response
+        response =  render(request, 'product_reviewer_app/search.html', params)
+    
+        response.set_cookie('searchProdPageNo', int(prodPageNo)+1)
+        response.set_cookie('prodName', searchVal)
+        print(int(prodPageNo)+1)
+        # return render(request, 'product_review/search.html', params)
+        return response
+    except Exception as e:
+        print(e)
+        return HttpResponse('Unable to fetch the product currently. Please go back to search another product')
+
 
 def reviewAnalysis(request):
     try:
@@ -61,7 +67,8 @@ def reviewAnalysis(request):
         return render(request, 'product_reviewer_app/chart.html', context={'plot_div': timeSeries_div,'pie_div':pie_div,'positive_comment':positive_comment,'negative_comment':negative_comment})
     except Exception as e:
         print(e)
-        return 'Error'
+        #return HttpResponse('Unable to fetch reviews for this product currently. Please go back to check another product')
+        return render(request, 'product_reviewer_app/error.html')
 
 def DisplayChart(request):
     try:
