@@ -228,48 +228,53 @@ def timeSeriesGraph(lineDf):
 #     return {'negWc':plot_negative_wc_img}
 
 def getReviewCharts(pId):
-    print("getReviewCharts", datetime.now())
+    try:
+            
+        print("getReviewCharts", datetime.now())
 
-    # Read data from scrapped reviews csv file
-    df=pd.read_csv(r'.\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv')
-    wcTasks=[]
-    wcExecutor=ThreadPoolExecutor(max_workers=4)
-    #wcTasks.append(wcExecutor.submit(positiveWc,df))
-    #wcTasks.append(wcExecutor.submit(negativeWc,df))
-   
-    df.sort_values(by=['sentiment_score'],ascending=False).head() # To get top positive review
+        # Read data from scrapped reviews csv file
+        df=pd.read_csv(r'.\product_reviewer_app\scrapped_reviews\/'+str(pId)+'_reviews.csv')
+        wcTasks=[]
+        wcExecutor=ThreadPoolExecutor(max_workers=4)
+        #wcTasks.append(wcExecutor.submit(positiveWc,df))
+        #wcTasks.append(wcExecutor.submit(negativeWc,df))
+    
+        df.sort_values(by=['sentiment_score'],ascending=False).head() # To get top positive review
 
-    positive_comment=list(df.sort_values(by=['sentiment_score'],ascending=False)[:1]['reviews'])[0]
-    negative_comment=list(df.sort_values(by=['sentiment_score'],ascending=True)[:1]['reviews'])[0]
+        positive_comment=list(df.sort_values(by=['sentiment_score'],ascending=False)[:1]['reviews'])[0]
+        negative_comment=list(df.sort_values(by=['sentiment_score'],ascending=True)[:1]['reviews'])[0]
 
-    pie_div=reviewPie(df)
-    wcTasks.append(wcExecutor.submit(reviewPie,df))
+        pie_div=reviewPie(df)
+        wcTasks.append(wcExecutor.submit(reviewPie,df))
 
-    # Review count per day
-    df.groupby(['date']).size()
-    reviewCountDf=df.groupby(['date']).size()
-    reviewCountDf=reviewCountDf.rename('review_count').reset_index()
-    reviewCountDf['date'] = pd.to_datetime(reviewCountDf['date'])
-    reviewCountDf=reviewCountDf.sort_values('date')
+        # Review count per day
+        df.groupby(['date']).size()
+        reviewCountDf=df.groupby(['date']).size()
+        reviewCountDf=reviewCountDf.rename('review_count').reset_index()
+        reviewCountDf['date'] = pd.to_datetime(reviewCountDf['date'])
+        reviewCountDf=reviewCountDf.sort_values('date')
 
-    timeSeries_div = timeSeriesGraph(reviewCountDf)
-    wcTasks.append(wcExecutor.submit(timeSeriesGraph,reviewCountDf))
-    print("task appended", datetime.now())
-    wcResult={}
-    for task in as_completed(wcTasks):
-        wcResult=task.result()
-        print(wcResult.keys())
-        # if 'posWc' in wcResult.keys():
-        #     plot_positive_wc_img=wcResult['posWc']
-        # elif 'negWc' in wcResult.keys():
-        #     plot_negative_wc_img=wcResult['negWc']
-        if 'pie_div' in wcResult.keys():
-            pie_div=wcResult['pie_div']
-        elif 'timeSeries_div' in wcResult.keys():
-            timeSeries_div=wcResult['timeSeries_div']
-    print("getReviewCharts completed ",datetime.now())
-    return pie_div,timeSeries_div,positive_comment,negative_comment
-
+        timeSeries_div = timeSeriesGraph(reviewCountDf)
+        wcTasks.append(wcExecutor.submit(timeSeriesGraph,reviewCountDf))
+        print("task appended", datetime.now())
+        wcResult={}
+        for task in as_completed(wcTasks):
+            wcResult=task.result()
+            print(wcResult.keys())
+            # if 'posWc' in wcResult.keys():
+            #     plot_positive_wc_img=wcResult['posWc']
+            # elif 'negWc' in wcResult.keys():
+            #     plot_negative_wc_img=wcResult['negWc']
+            if 'pie_div' in wcResult.keys():
+                pie_div=wcResult['pie_div']
+            elif 'timeSeries_div' in wcResult.keys():
+                timeSeries_div=wcResult['timeSeries_div']
+        print("getReviewCharts completed ",datetime.now())
+        return pie_div,timeSeries_div,positive_comment,negative_comment
+    except Exception as e:
+        print("Error occurred during review analysis due to ", str(e))
+        raise 
+    
 def saveReviews(pId):
     print(datetime.now())
     # response=Searchasin(pId)
